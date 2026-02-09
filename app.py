@@ -153,7 +153,8 @@ with tab_briefing:
             if not data:
                 continue
             with st.expander(f"{data['emoji']} {data['title']}", expanded=True):
-                st.markdown(data["content"])
+                # Escape $ signs so Streamlit doesn't render them as LaTeX
+                st.markdown(data["content"].replace("$", "\\$"))
 
         # Footer
         st.markdown("---")
