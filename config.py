@@ -39,7 +39,7 @@ SECTIONS = [
             "Find early-stage food, foodtech, and agtech venture capital deals "
             "from this week: Seed rounds, Series A, Series B, and accelerator "
             "announcements. Prioritise UK and European deals. Look for investments "
-            "by firms such as Bramble Partners, Astanor Ventures, Five Seasons "
+            "by firms such as Astanor Ventures, Five Seasons "
             "Ventures, CPT Capital, Synthesis Capital, Blue Horizon, Nordic "
             "Foodtech VC, S2G Ventures, AgFunder, Acre Venture Partners, Unovis, "
             "and similar early-stage food/ag investors. Include the startup name, "
