@@ -61,13 +61,8 @@ with st.sidebar:
     st.title("\U0001F4CB Food Briefing")
     st.markdown("---")
 
-    # API key
-    api_key = st.text_input(
-        "Perplexity API Key",
-        type="password",
-        value=os.environ.get("PERPLEXITY_API_KEY", ""),
-        help="Get your key at https://www.perplexity.ai/settings/api",
-    )
+    # API key — read from secrets/env, no user input needed
+    api_key = os.environ.get("PERPLEXITY_API_KEY", "")
 
     st.markdown("---")
 
@@ -102,7 +97,7 @@ with st.sidebar:
     )
 
     if not api_key:
-        st.caption("Enter your API key above to generate briefings.")
+        st.caption("API key not configured. Contact admin.")
 
 # --- Main area ---
 
