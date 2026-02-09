@@ -61,8 +61,9 @@ with st.sidebar:
     st.title("\U0001F4CB Food Briefing")
     st.markdown("---")
 
-    # API key — read from secrets/env, no user input needed
+    # API key and investment context — read from secrets/env only
     api_key = os.environ.get("PERPLEXITY_API_KEY", "")
+    investment_context = os.environ.get("BRAMBLE_PITCH", "")
 
     st.markdown("---")
 
@@ -125,7 +126,9 @@ with tab_briefing:
 
             with st.spinner("Generating briefing..."):
                 briefing = generate_full_briefing(
-                    api_key, selected_week, progress_callback=update_progress
+                    api_key, selected_week,
+                    progress_callback=update_progress,
+                    investment_context=investment_context,
                 )
             st.success("Briefing generated and cached!")
     else:

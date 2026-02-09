@@ -174,7 +174,7 @@ def fetch_section(
     return response.choices[0].message.content
 
 
-def fetch_top3(client: OpenAI, briefing: dict) -> str:
+def fetch_top3(client: OpenAI, briefing: dict, investment_context: str = "") -> str:
     """Review all section content and identify the 3 most significant developments."""
     all_content = "\n\n".join(
         f"## {data['title']}\n{data['content']}"
@@ -190,24 +190,34 @@ def fetch_top3(client: OpenAI, briefing: dict) -> str:
                     "You are a senior analyst at a UK-based early-stage food and "
                     "agtech venture capital fund. Review the following weekly briefing "
                     "and identify the 3 most significant developments through the "
-                    "lens of a Seed/Series A investor in UK food innovation.\n\n"
-                    "Prioritise developments that:\n"
-                    "- Signal emerging investment themes or thesis shifts\n"
+                    "lens of the fund's investment thesis.\n\n"
+                    + (
+                        f"FUND INVESTMENT CONTEXT:\n{investment_context}\n\n"
+                        if investment_context
+                        else ""
+                    )
+                    + "Prioritise developments that:\n"
+                    "- Directly relate to the fund's three transition themes: "
+                    "sustainable production, health & nutrition, waste & circularity\n"
+                    "- Signal emerging investment themes or validate existing thesis\n"
                     "- Affect early-stage foodtech/agtech startups in the UK and Europe\n"
+                    "- Create tailwinds or opportunities for portfolio companies\n"
                     "- Indicate where capital is flowing or where new opportunities "
-                    "are opening up\n"
-                    "- Have implications for portfolio strategy, not just big grocery\n\n"
+                    "are opening up\n\n"
                     "Format each as a numbered item (1. 2. 3.) with:\n"
                     "- A **bold lead-in phrase** summarising the development\n"
                     "- The key facts in plain text\n"
                     "- Preserve any markdown hyperlinks [text](url) from the source "
                     "material — copy them into your output exactly as they appear\n"
-                    "- A final sentence in *italics* explaining the investment thesis "
-                    "implication for early-stage UK food investors\n\n"
-                    "Focus on decisive shifts, not incremental news.\n"
+                    "- A final sentence in *italics* explaining the specific investment "
+                    "thesis implication — how this affects deal flow, portfolio strategy, "
+                    "or sector conviction\n\n"
+                    "Focus on decisive shifts, not incremental news. "
+                    "Write in British English.\n"
                     "ABSOLUTELY NEVER use numbered reference citations like [1], [2], "
                     "[3], [4], [5]. Instead, keep the original [text](url) hyperlinks "
-                    "from the briefing content."
+                    "from the briefing content.\n"
+                    "NEVER mention the fund by name in the output."
                 ),
             },
             {
@@ -235,6 +245,7 @@ def generate_full_briefing(
     api_key: str,
     week_key: str,
     progress_callback=None,
+    investment_context: str = "",
 ) -> dict:
     """Generate a full briefing across all sections. Returns a briefing dict."""
     client = get_client(api_key)
@@ -272,7 +283,7 @@ def generate_full_briefing(
         progress_callback(len(SECTIONS), len(SECTIONS) + 1, "Top 3 highlights")
 
     try:
-        briefing["top3"] = fetch_top3(client, briefing)
+        briefing["top3"] = fetch_top3(client, briefing, investment_context)
     except Exception as e:
         briefing["top3"] = f"*Error generating highlights: {e}*"
 
