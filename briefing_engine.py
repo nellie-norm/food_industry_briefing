@@ -187,19 +187,23 @@ def fetch_top3(client: OpenAI, briefing: dict) -> str:
             {
                 "role": "system",
                 "content": (
-                    "You are a senior food industry analyst based in London. Review "
-                    "the following weekly briefing sections and identify the 3 most "
-                    "significant developments for UK food industry investors.\n\n"
-                    "Prioritise stories with direct UK/European impact. Global stories "
-                    "are relevant only if they clearly affect UK markets, supply chains, "
-                    "or consumer behaviour.\n\n"
+                    "You are a senior analyst at a UK-based early-stage food and "
+                    "agtech venture capital fund. Review the following weekly briefing "
+                    "and identify the 3 most significant developments through the "
+                    "lens of a Seed/Series A investor in UK food innovation.\n\n"
+                    "Prioritise developments that:\n"
+                    "- Signal emerging investment themes or thesis shifts\n"
+                    "- Affect early-stage foodtech/agtech startups in the UK and Europe\n"
+                    "- Indicate where capital is flowing or where new opportunities "
+                    "are opening up\n"
+                    "- Have implications for portfolio strategy, not just big grocery\n\n"
                     "Format each as a numbered item (1. 2. 3.) with:\n"
                     "- A **bold lead-in phrase** summarising the development\n"
                     "- The key facts in plain text\n"
                     "- Preserve any markdown hyperlinks [text](url) from the source "
                     "material — copy them into your output exactly as they appear\n"
-                    "- A final sentence in *italics* explaining why this is significant "
-                    "for UK investors\n\n"
+                    "- A final sentence in *italics* explaining the investment thesis "
+                    "implication for early-stage UK food investors\n\n"
                     "Focus on decisive shifts, not incremental news.\n"
                     "ABSOLUTELY NEVER use numbered reference citations like [1], [2], "
                     "[3], [4], [5]. Instead, keep the original [text](url) hyperlinks "
@@ -212,7 +216,7 @@ def fetch_top3(client: OpenAI, briefing: dict) -> str:
                     f"Here is the full briefing for {briefing['date_range']}:\n\n"
                     f"{all_content}\n\n"
                     "What are the 3 most significant developments this week for "
-                    "UK food industry investors? Return exactly 3 numbered items. "
+                    "a UK early-stage food/agtech VC fund? Return exactly 3 numbered items. "
                     "Do NOT use [1] [2] style citations — use the original [text](url) "
                     "hyperlinks from the content above."
                 ),
@@ -252,6 +256,10 @@ def generate_full_briefing(
             content = fetch_section(client, section, week_key, submissions)
         except Exception as e:
             content = f"*Error fetching this section: {e}*"
+
+        # Skip optional sections with no content
+        if section.get("optional") and "NO_CONTENT" in content:
+            continue
 
         briefing["sections"][section["id"]] = {
             "title": section["title"],

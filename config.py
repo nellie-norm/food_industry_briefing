@@ -34,6 +34,9 @@ SECTIONS = [
             "vegconomist.com",
             "greenqueen.com.hk",
             "foodhack.global",
+            "ukri.org",
+            "eitfood.eu",
+            "eif.org",
         ],
         "prompt_focus": (
             "Find early-stage food, foodtech, and agtech venture capital deals "
@@ -42,8 +45,35 @@ SECTIONS = [
             "by firms such as Astanor Ventures, Five Seasons "
             "Ventures, CPT Capital, Synthesis Capital, Blue Horizon, Nordic "
             "Foodtech VC, S2G Ventures, AgFunder, Acre Venture Partners, Unovis, "
-            "and similar early-stage food/ag investors. Include the startup name, "
-            "what they do, round size, lead investors, and stage."
+            "and similar early-stage food/ag investors. Also include grants or "
+            "innovation funding from EIF, UKRI, Innovate UK, EIT Food, and UK "
+            "Agritech Centre. Include the startup name, what they do, round size, "
+            "lead investors, and stage."
+        ),
+    },
+    {
+        "id": "new_funds",
+        "title": "New Funds & Programmes",
+        "emoji": "\U0001F4E3",
+        "optional": True,
+        "domains": [
+            "agfunder.com",
+            "sifted.eu",
+            "eif.org",
+            "eitfood.eu",
+            "ukri.org",
+            "foodnavigator.com",
+            "ft.com",
+        ],
+        "prompt_focus": (
+            "Find any NEW venture capital funds, investment vehicles, grant "
+            "programmes, or accelerator programmes launched or announced this week "
+            "that focus on food, foodtech, agritech, or sustainable agriculture. "
+            "Include new fund launches by VCs, new EIF or UKRI funding programmes, "
+            "new EIT Food calls, government agritech initiatives, and corporate "
+            "venture fund announcements. Include fund size, geographic focus, "
+            "thesis, and timeline. If there are no new funds or programmes "
+            "announced this week, respond with exactly: NO_CONTENT"
         ),
     },
     {
@@ -91,6 +121,8 @@ SECTIONS = [
             "sciencedaily.com",
             "nature.com",
             "newscientist.com",
+            "ukri.org",
+            "eitfood.eu",
         ],
         "prompt_focus": (
             "Find important food science and nutrition research published or covered "
@@ -105,11 +137,20 @@ SECTIONS = [
         "id": "policy_regulation",
         "title": "Policy & Regulation",
         "emoji": "\U0001F3DB\uFE0F",
-        "domains": ["fda.gov", "foodnavigator.com", "fooddive.com"],
+        "domains": [
+            "foodnavigator.com",
+            "fooddive.com",
+            "gov.uk",
+            "food.gov.uk",
+            "fda.gov",
+        ],
         "prompt_focus": (
-            "Find significant food policy and regulatory developments this week, "
-            "including FDA actions, labeling changes, trade policy, food safety "
-            "recalls, sustainability mandates, and international regulatory updates."
+            "Find significant food policy and regulatory developments this week. "
+            "Prioritise UK and EU actions: FSA, DEFRA, UK government food policy, "
+            "EU food safety authority (EFSA), and European Commission regulations. "
+            "Also include major FDA and international actions with UK implications. "
+            "Cover labelling changes, trade policy, food safety recalls, "
+            "sustainability mandates, and novel food approvals."
         ),
     },
     {
