@@ -10,14 +10,40 @@ SUBMISSIONS_DIR = os.path.join(os.path.dirname(__file__), "submissions")
 
 SECTIONS = [
     {
-        "id": "deals_capital",
-        "title": "Deals & Capital",
-        "emoji": "\U0001F4B0",
-        "domains": ["agfunder.com", "fooddive.com", "ft.com", "crunchbase.com"],
+        "id": "deals_corporate",
+        "title": "Corporate M&A & Big Food",
+        "emoji": "\U0001F3E2",
+        "domains": ["fooddive.com", "ft.com", "thegrocer.co.uk", "foodnavigator.com"],
         "prompt_focus": (
-            "Find the most significant food and agriculture investment deals, "
-            "funding rounds, M&A activity, IPOs, and capital raises from this week. "
-            "Include deal sizes, investors, and strategic rationale where available."
+            "Find the most significant large-scale food industry corporate deals "
+            "this week: M&A, major acquisitions, divestitures, IPOs, and large "
+            "capital raises (Series C+, $50M+). Focus on Big Food companies, "
+            "major retailers, and large private equity transactions. "
+            "Include deal sizes, acquirers, and strategic rationale."
+        ),
+    },
+    {
+        "id": "deals_earlystage",
+        "title": "Early-Stage & VC",
+        "emoji": "\U0001F331",
+        "domains": [
+            "agfunder.com",
+            "sifted.eu",
+            "techcrunch.com",
+            "foodnavigator.com",
+            "vegconomist.com",
+            "greenqueen.com.hk",
+            "foodhack.global",
+        ],
+        "prompt_focus": (
+            "Find early-stage food, foodtech, and agtech venture capital deals "
+            "from this week: Seed rounds, Series A, Series B, and accelerator "
+            "announcements. Prioritise UK and European deals. Look for investments "
+            "by firms such as Bramble Partners, Astanor Ventures, Five Seasons "
+            "Ventures, CPT Capital, Synthesis Capital, Blue Horizon, Nordic "
+            "Foodtech VC, S2G Ventures, AgFunder, Acre Venture Partners, Unovis, "
+            "and similar early-stage food/ag investors. Include the startup name, "
+            "what they do, round size, lead investors, and stage."
         ),
     },
     {
