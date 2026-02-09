@@ -72,11 +72,24 @@ def _sanitize_for_latin1(text: str) -> str:
         "\u2026": "...",  # ellipsis
         "\u2022": "-",    # bullet
         "\u00a0": " ",    # non-breaking space
+        "\u2010": "-",    # hyphen
+        "\u2011": "-",    # non-breaking hyphen
+        "\u2012": "-",    # figure dash
+        "\u2032": "'",    # prime
+        "\u2033": '"',    # double prime
+        "\u20ac": "EUR",  # euro sign (not in latin-1 core fonts)
+        "\u2122": "(TM)", # trademark
+        "\u2020": "+",    # dagger
+        "\u2021": "++",   # double dagger
+        "\u2039": "<",    # single left angle quote
+        "\u203a": ">",    # single right angle quote
+        "\u00ab": "<<",   # left double angle quote
+        "\u00bb": ">>",   # right double angle quote
     }
     for char, repl in replacements.items():
         text = text.replace(char, repl)
-    # Drop any remaining non-latin-1 characters
-    return text.encode("latin-1", errors="replace").decode("latin-1")
+    # Drop any remaining non-latin-1 characters silently (no ? marks)
+    return text.encode("latin-1", errors="ignore").decode("latin-1")
 
 
 def _strip_markdown_links(text: str) -> str:
