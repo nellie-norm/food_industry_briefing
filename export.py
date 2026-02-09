@@ -85,15 +85,18 @@ def _strip_markdown_links(text: str) -> str:
 
 
 def _render_markdown_line(pdf: FPDF, line: str):
-    """Render a single line of markdown-ish text into the PDF, handling bold."""
+    """Render a single line of markdown-ish text into the PDF, handling bold and italic."""
     line = _strip_markdown_links(line)
     line = _sanitize_for_latin1(line)
-    # Split on bold markers
-    parts = re.split(r"(\*\*[^*]+\*\*)", line)
+    # Split on bold (**text**) and italic (*text*) markers
+    parts = re.split(r"(\*\*[^*]+\*\*|\*[^*]+\*)", line)
     for part in parts:
         if part.startswith("**") and part.endswith("**"):
             pdf.set_font("Helvetica", "B", 10)
             pdf.write(5, part[2:-2])
+        elif part.startswith("*") and part.endswith("*"):
+            pdf.set_font("Helvetica", "I", 10)
+            pdf.write(5, part[1:-1])
         else:
             pdf.set_font("Helvetica", "", 10)
             pdf.write(5, part)

@@ -188,10 +188,14 @@ def fetch_top3(client: OpenAI, briefing: dict) -> str:
                 "content": (
                     "You are a senior food industry analyst. Review the following "
                     "weekly briefing sections and identify the 3 most significant "
-                    "developments that food industry investors must know. For each, "
-                    "write a single concise bullet point with a **bold lead-in** "
-                    "explaining why it matters. Focus on decisive shifts, not "
-                    "incremental news. Do NOT use numbered citations like [1]. "
+                    "developments that food industry investors must know.\n\n"
+                    "Format each as a numbered item (1. 2. 3.) with:\n"
+                    "- A **bold lead-in phrase** summarizing the development\n"
+                    "- The key facts in plain text\n"
+                    "- A final sentence in *italics* explaining why this is significant "
+                    "for investors\n\n"
+                    "Focus on decisive shifts, not incremental news. "
+                    "Do NOT use numbered citations like [1]. "
                     "Include inline markdown hyperlinks where possible."
                 ),
             },
@@ -201,7 +205,7 @@ def fetch_top3(client: OpenAI, briefing: dict) -> str:
                     f"Here is the full briefing for {briefing['date_range']}:\n\n"
                     f"{all_content}\n\n"
                     "What are the 3 most significant developments this week for "
-                    "food industry investors? Return exactly 3 markdown bullet points."
+                    "food industry investors? Return exactly 3 numbered items."
                 ),
             },
         ],
