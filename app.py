@@ -31,6 +31,8 @@ def _normalize_content(text: str) -> str:
     """
     # Convert ### / ## / # headings within content to bold sub-headers
     text = re.sub(r"^#{1,3}\s+(.+)$", r"**\1**", text, flags=re.MULTILINE)
+    # Insert space before markdown links that are jammed against preceding text
+    text = re.sub(r"([^\s(\[])\[([^\]]+)\]\(", r"\1 [\2](", text)
     # Escape dollar signs
     text = text.replace("$", "\\$")
     return text
