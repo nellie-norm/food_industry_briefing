@@ -61,11 +61,9 @@ with st.sidebar:
     st.title("\U0001F4CB Food Briefing")
     st.markdown("---")
 
-    # API key and investment context — read from secrets/env only
+    # API key and investment context — read from secrets/env by default
     api_key = os.environ.get("PERPLEXITY_API_KEY", "")
     investment_context = os.environ.get("BRAMBLE_PITCH", "")
-
-    st.markdown("---")
 
     # Week selector — default to previous week
     previous_week = get_week_key(previous=True)
@@ -99,8 +97,15 @@ with st.sidebar:
         disabled=not api_key,
     )
 
-    if not api_key:
-        st.caption("API key not configured. Contact admin.")
+    # Admin settings tucked away at the bottom
+    with st.expander("Settings", expanded=not api_key):
+        manual_key = st.text_input(
+            "API Key override",
+            type="password",
+            help="Only needed if not configured in secrets",
+        )
+        if manual_key:
+            api_key = manual_key
 
 # --- Main area ---
 
