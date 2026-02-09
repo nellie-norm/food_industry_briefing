@@ -17,8 +17,23 @@ from briefing_engine import (
     load_briefing,
     load_submissions,
 )
+import re
+
 from config import SECTIONS
 from export import briefing_to_markdown, briefing_to_pdf
+
+
+def _normalize_content(text: str) -> str:
+    """Normalize markdown content for consistent display.
+
+    - Convert ### headings to bold sub-headers
+    - Escape $ to prevent LaTeX rendering
+    """
+    # Convert ### / ## / # headings within content to bold sub-headers
+    text = re.sub(r"^#{1,3}\s+(.+)$", r"**\1**", text, flags=re.MULTILINE)
+    # Escape dollar signs
+    text = text.replace("$", "\\$")
+    return text
 
 # --- Page config ---
 
@@ -123,8 +138,7 @@ with tab_briefing:
     # Display briefing
     if briefing:
         start_date, end_date = get_week_date_range(selected_week)
-        st.title(f"Food Industry Weekly Briefing")
-        st.markdown(f"### {start_date} — {end_date}")
+        st.markdown(f"## {start_date} — {end_date}")
 
         # Export buttons
         col1, col2, col3 = st.columns([6, 1, 1])
@@ -148,7 +162,7 @@ with tab_briefing:
         # Top 3 highlights
         if briefing.get("top3"):
             st.markdown("#### Key Developments This Week")
-            st.markdown(briefing["top3"].replace("$", "\\$"))
+            st.markdown(_normalize_content(briefing["top3"]))
 
         st.markdown("---")
 
@@ -158,8 +172,7 @@ with tab_briefing:
             if not data:
                 continue
             with st.expander(f"{data['emoji']} {data['title']}", expanded=True):
-                # Escape $ signs so Streamlit doesn't render them as LaTeX
-                st.markdown(data["content"].replace("$", "\\$"))
+                st.markdown(_normalize_content(data["content"]))
 
         # Footer
         st.markdown("---")
