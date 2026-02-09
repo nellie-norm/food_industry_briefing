@@ -132,8 +132,18 @@ def briefing_to_pdf(briefing: dict) -> bytes:
             if not line:
                 pdf.ln(2)
                 continue
+            # Handle markdown subheadings (###, ##, #)
+            if line.startswith("#"):
+                heading_text = line.lstrip("#").strip()
+                heading_text = _sanitize_for_latin1(heading_text)
+                pdf.ln(3)
+                pdf.set_font("Helvetica", "B", 11)
+                pdf.set_text_color(30, 30, 30)
+                pdf.cell(0, 7, heading_text, new_x="LMARGIN", new_y="NEXT")
+                pdf.ln(1)
+                pdf.set_text_color(30, 30, 30)
             # Handle bullet points
-            if line.startswith("- ") or line.startswith("* "):
+            elif line.startswith("- ") or line.startswith("* "):
                 pdf.set_font("Helvetica", "", 10)
                 pdf.write(5, "  -  ")
                 _render_markdown_line(pdf, line[2:])
