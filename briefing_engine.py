@@ -2,6 +2,7 @@
 
 import json
 import os
+import re
 from datetime import datetime, timedelta
 
 from openai import OpenAI
@@ -181,7 +182,7 @@ def fetch_top3(client: OpenAI, briefing: dict) -> str:
     )
 
     response = client.chat.completions.create(
-        model=PERPLEXITY_MODEL,
+        model="sonar",
         messages=[
             {
                 "role": "system",
@@ -195,11 +196,14 @@ def fetch_top3(client: OpenAI, briefing: dict) -> str:
                     "Format each as a numbered item (1. 2. 3.) with:\n"
                     "- A **bold lead-in phrase** summarising the development\n"
                     "- The key facts in plain text\n"
+                    "- Preserve any markdown hyperlinks [text](url) from the source "
+                    "material — copy them into your output exactly as they appear\n"
                     "- A final sentence in *italics* explaining why this is significant "
                     "for UK investors\n\n"
-                    "Focus on decisive shifts, not incremental news. "
-                    "Do NOT use numbered citations like [1]. "
-                    "Include inline markdown hyperlinks where possible."
+                    "Focus on decisive shifts, not incremental news.\n"
+                    "ABSOLUTELY NEVER use numbered reference citations like [1], [2], "
+                    "[3], [4], [5]. Instead, keep the original [text](url) hyperlinks "
+                    "from the briefing content."
                 ),
             },
             {
@@ -208,14 +212,19 @@ def fetch_top3(client: OpenAI, briefing: dict) -> str:
                     f"Here is the full briefing for {briefing['date_range']}:\n\n"
                     f"{all_content}\n\n"
                     "What are the 3 most significant developments this week for "
-                    "UK food industry investors? Return exactly 3 numbered items."
+                    "UK food industry investors? Return exactly 3 numbered items. "
+                    "Do NOT use [1] [2] style citations — use the original [text](url) "
+                    "hyperlinks from the content above."
                 ),
             },
         ],
         temperature=0.1,
     )
 
-    return response.choices[0].message.content
+    result = response.choices[0].message.content
+    # Strip any remaining [N] numbered citations that Perplexity adds
+    result = re.sub(r"\[(\d+)\]", "", result)
+    return result
 
 
 def generate_full_briefing(
