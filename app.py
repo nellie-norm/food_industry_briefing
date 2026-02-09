@@ -87,6 +87,8 @@ with st.sidebar:
     if cache_exists:
         regenerate = st.checkbox("Regenerate (replace saved version)", value=False)
 
+    expand_all = st.checkbox("Expand all sections", value=True)
+
     st.markdown("---")
 
     # Generate button
@@ -171,7 +173,7 @@ with tab_briefing:
             data = briefing["sections"].get(section["id"])
             if not data:
                 continue
-            with st.expander(f"{data['emoji']} {data['title']}", expanded=True):
+            with st.expander(f"{data['emoji']} {data['title']}", expanded=expand_all):
                 st.markdown(_normalize_content(data["content"]))
 
         # Footer
