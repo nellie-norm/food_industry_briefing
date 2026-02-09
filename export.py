@@ -15,6 +15,14 @@ def briefing_to_markdown(briefing: dict) -> str:
         "",
     ]
 
+    if briefing.get("top3"):
+        lines.append("## Key Developments This Week")
+        lines.append("")
+        lines.append(briefing["top3"])
+        lines.append("")
+        lines.append("---")
+        lines.append("")
+
     for section in SECTIONS:
         data = briefing["sections"].get(section["id"])
         if not data:
@@ -107,6 +115,31 @@ def briefing_to_pdf(briefing: dict) -> bytes:
     pdf.set_text_color(100, 100, 100)
     pdf.cell(0, 8, _sanitize_for_latin1(briefing["date_range"]), new_x="LMARGIN", new_y="NEXT")
     pdf.ln(6)
+
+    # Top 3 highlights
+    if briefing.get("top3"):
+        pdf.set_font("Helvetica", "B", 13)
+        pdf.set_text_color(37, 99, 235)
+        pdf.cell(0, 10, "Key Developments This Week", new_x="LMARGIN", new_y="NEXT")
+        pdf.set_draw_color(37, 99, 235)
+        pdf.line(10, pdf.get_y(), 80, pdf.get_y())
+        pdf.ln(3)
+        pdf.set_text_color(30, 30, 30)
+        for line in briefing["top3"].split("\n"):
+            line = line.strip()
+            if not line:
+                pdf.ln(2)
+                continue
+            if line.startswith("- ") or line.startswith("* "):
+                pdf.set_font("Helvetica", "", 10)
+                pdf.write(5, "  -  ")
+                _render_markdown_line(pdf, line[2:])
+            else:
+                _render_markdown_line(pdf, line)
+        pdf.ln(6)
+        pdf.set_draw_color(200, 200, 200)
+        pdf.line(10, pdf.get_y(), 200, pdf.get_y())
+        pdf.ln(6)
 
     for section in SECTIONS:
         data = briefing["sections"].get(section["id"])

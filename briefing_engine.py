@@ -173,6 +173,44 @@ def fetch_section(
     return response.choices[0].message.content
 
 
+def fetch_top3(client: OpenAI, briefing: dict) -> str:
+    """Review all section content and identify the 3 most significant developments."""
+    all_content = "\n\n".join(
+        f"## {data['title']}\n{data['content']}"
+        for data in briefing["sections"].values()
+    )
+
+    response = client.chat.completions.create(
+        model=PERPLEXITY_MODEL,
+        messages=[
+            {
+                "role": "system",
+                "content": (
+                    "You are a senior food industry analyst. Review the following "
+                    "weekly briefing sections and identify the 3 most significant "
+                    "developments that food industry investors must know. For each, "
+                    "write a single concise bullet point with a **bold lead-in** "
+                    "explaining why it matters. Focus on decisive shifts, not "
+                    "incremental news. Do NOT use numbered citations like [1]. "
+                    "Include inline markdown hyperlinks where possible."
+                ),
+            },
+            {
+                "role": "user",
+                "content": (
+                    f"Here is the full briefing for {briefing['date_range']}:\n\n"
+                    f"{all_content}\n\n"
+                    "What are the 3 most significant developments this week for "
+                    "food industry investors? Return exactly 3 markdown bullet points."
+                ),
+            },
+        ],
+        temperature=0.1,
+    )
+
+    return response.choices[0].message.content
+
+
 def generate_full_briefing(
     api_key: str,
     week_key: str,
@@ -205,8 +243,17 @@ def generate_full_briefing(
             "content": content,
         }
 
+    # Generate Top 3 from all section content
     if progress_callback:
-        progress_callback(len(SECTIONS), len(SECTIONS), "Done")
+        progress_callback(len(SECTIONS), len(SECTIONS) + 1, "Top 3 highlights")
+
+    try:
+        briefing["top3"] = fetch_top3(client, briefing)
+    except Exception as e:
+        briefing["top3"] = f"*Error generating highlights: {e}*"
+
+    if progress_callback:
+        progress_callback(len(SECTIONS) + 1, len(SECTIONS) + 1, "Done")
 
     save_briefing(week_key, briefing)
     return briefing

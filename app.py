@@ -145,6 +145,11 @@ with tab_briefing:
                 mime="application/pdf",
             )
 
+        # Top 3 highlights
+        if briefing.get("top3"):
+            st.markdown("#### Key Developments This Week")
+            st.markdown(briefing["top3"].replace("$", "\\$"))
+
         st.markdown("---")
 
         # Sections
