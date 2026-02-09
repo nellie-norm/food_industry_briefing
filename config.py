@@ -90,11 +90,20 @@ SECTIONS = [
         "id": "macro_consumer",
         "title": "Macro & Consumer",
         "emoji": "\U0001F4CA",
-        "domains": ["ft.com", "nytimes.com", "economist.com"],
+        "domains": [
+            "fooddive.com",
+            "grocerydive.com",
+            "foodnavigator.com",
+            "reuters.com",
+            "bls.gov",
+            "usda.gov",
+        ],
         "prompt_focus": (
             "Find macroeconomic and consumer trends affecting the food industry "
-            "this week, including food price inflation, consumer spending data, "
-            "supply chain developments, commodity markets, and shifting dietary patterns."
+            "this week, including food price inflation data (CPI, PPI), consumer "
+            "spending reports, grocery sales figures, commodity price movements, "
+            "supply chain disruptions, trade and tariff developments, and shifting "
+            "dietary or shopping patterns. Include specific numbers and data points."
         ),
     },
 ]
@@ -105,7 +114,10 @@ SYSTEM_PROMPT = (
     "- 4 to 6 concise markdown bullet points per section\n"
     "- Each bullet starts with a **bold lead-in phrase** summarizing the development\n"
     "- Include specific numbers, company names, and deal sizes where available\n"
-    "- Cite source URLs inline as markdown links where possible\n"
+    "- CRITICAL: Embed source URLs as inline markdown hyperlinks within the text, "
+    "e.g. [Food Dive](https://www.fooddive.com/...). "
+    "NEVER use numbered reference citations like [1], [2], [3]. "
+    "Every claim should link directly to its source within the sentence.\n"
     "- Professional, analytical tone — no hype, no filler\n"
     "- Focus on developments from the current week only\n"
     "- Prioritize stories by significance to food industry investors"
