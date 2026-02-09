@@ -72,7 +72,7 @@ with st.sidebar:
     cache_exists = selected_week in cached_weeks
     regenerate = False
     if cache_exists:
-        regenerate = st.checkbox("Regenerate (overwrite cache)", value=False)
+        regenerate = st.checkbox("Regenerate (replace saved version)", value=False)
 
     st.markdown("---")
 
@@ -100,7 +100,7 @@ with tab_briefing:
     if generate_clicked and api_key:
         if cache_exists and not regenerate:
             briefing = load_briefing(selected_week)
-            st.info("Loaded from cache. Check 'Regenerate' to overwrite.")
+            st.info("Loaded a previously saved briefing. Check 'Regenerate' in the sidebar to create a fresh one.")
         else:
             progress_bar = st.progress(0, text="Starting briefing generation...")
 
@@ -163,7 +163,9 @@ with tab_briefing:
         st.markdown("## Welcome")
         st.markdown(
             "No briefing for this week yet. Enter your Perplexity API key in the "
-            "sidebar and click **Generate Briefing** to get started.\n\n"
+            "sidebar and click **Generate Briefing** to create one.\n\n"
+            "Past briefings are saved automatically — use the **week selector** "
+            "in the sidebar to browse previous weeks.\n\n"
             "You can also switch to the **Submit Stories** tab to add URLs for "
             "the team to review."
         )
