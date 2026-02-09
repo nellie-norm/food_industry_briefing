@@ -61,9 +61,15 @@ with st.sidebar:
     st.title("\U0001F4CB Food Briefing")
     st.markdown("---")
 
-    # API key and investment context — read from secrets/env by default
-    api_key = os.environ.get("PERPLEXITY_API_KEY", "")
-    investment_context = os.environ.get("BRAMBLE_PITCH", "")
+    # API key and investment context — try st.secrets first, then env
+    def _get_secret(key, default=""):
+        try:
+            return st.secrets[key]
+        except (KeyError, FileNotFoundError):
+            return os.environ.get(key, default)
+
+    api_key = _get_secret("PERPLEXITY_API_KEY")
+    investment_context = _get_secret("BRAMBLE_PITCH")
 
     # Settings — auto-expands if no API key configured
     with st.expander("Settings", expanded=not api_key):
