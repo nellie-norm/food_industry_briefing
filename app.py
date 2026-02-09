@@ -65,6 +65,18 @@ with st.sidebar:
     api_key = os.environ.get("PERPLEXITY_API_KEY", "")
     investment_context = os.environ.get("BRAMBLE_PITCH", "")
 
+    # Settings — auto-expands if no API key configured
+    with st.expander("Settings", expanded=not api_key):
+        manual_key = st.text_input(
+            "API Key",
+            type="password",
+            help="Only needed if not configured in secrets",
+        )
+        if manual_key:
+            api_key = manual_key
+
+    st.markdown("---")
+
     # Week selector — default to previous week
     previous_week = get_week_key(previous=True)
     current_week = get_week_key()
@@ -96,16 +108,6 @@ with st.sidebar:
         use_container_width=True,
         disabled=not api_key,
     )
-
-    # Admin settings tucked away at the bottom
-    with st.expander("Settings", expanded=not api_key):
-        manual_key = st.text_input(
-            "API Key override",
-            type="password",
-            help="Only needed if not configured in secrets",
-        )
-        if manual_key:
-            api_key = manual_key
 
 # --- Main area ---
 
